@@ -7,11 +7,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -24,6 +27,28 @@ fun HomeScreen(
     viewModel: HomeViewModel = koinViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val listState = rememberLazyListState()
+
+    LaunchedEffect(listState) {
+        snapshotFlow {
+            val layoutInfo = listState.layoutInfo
+
+            val lastVisibleItemIndex =
+                layoutInfo.visibleItemsInfo.lastOrNull()?.index
+
+            val totalItems = layoutInfo.totalItemsCount
+
+            lastVisibleItemIndex to totalItems
+        }.collect { (lastVisibleItemIndex, totalItems) ->
+
+            if (
+                lastVisibleItemIndex != null &&
+                lastVisibleItemIndex >= totalItems - 5
+            ) {
+                viewModel.loadNextPage()
+            }
+        }
+    }
 
     Column(
         modifier = Modifier.fillMaxSize()
@@ -77,6 +102,7 @@ fun HomeScreen(
                     )
 
                     LazyColumn(
+                        state = listState,
                         modifier = Modifier.fillMaxSize(),
                         contentPadding = PaddingValues(
                             horizontal = 12.dp,
@@ -89,6 +115,19 @@ fun HomeScreen(
                             key = { it.id }
                         ) { movie ->
                             MovieCard(movie = movie)
+                        }
+
+                        if (state.isLoadingMore) {
+                            item {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(16.dp),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    CircularProgressIndicator()
+                                }
+                            }
                         }
                     }
                 }

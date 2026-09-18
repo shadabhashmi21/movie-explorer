@@ -10,13 +10,18 @@ import io.ktor.client.statement.HttpResponse
 class MovieApi(
     private val httpClient: HttpClient
 ){
-    suspend fun getTopRatedMovies(): MovieResponseDto {
+    suspend fun getTopRatedMovies(page: Int): MovieResponseDto {
         return httpClient
             .get("https://api.themoviedb.org/3/movie/top_rated") {
                 url {
                     parameters.append(
                         "api_key",
                         "e3fa29ff3ccecf2807d0ae68d4c4265e"
+                    )
+
+                    parameters.append(
+                        "page",
+                        page.toString()
                     )
                 }
             }
