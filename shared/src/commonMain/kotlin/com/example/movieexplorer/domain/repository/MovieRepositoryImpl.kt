@@ -1,4 +1,6 @@
 import com.example.movieexplorer.data.remote.MovieApi
+import com.example.movieexplorer.data.remote.mapper.toMovieDetails
+import com.example.movieexplorer.domain.model.MovieDetails
 
 class MovieRepositoryImpl(
     private val movieApi: MovieApi
@@ -11,5 +13,11 @@ class MovieRepositoryImpl(
             page = response.page,
             totalPages = response.totalPages
         )
+    }
+
+    override suspend fun getMovieDetails(movieId: Int): MovieDetails {
+        return movieApi
+            .getMovieDetails(movieId)
+            .toMovieDetails()
     }
 }

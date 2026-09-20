@@ -1,5 +1,6 @@
 package com.example.movieexplorer.data.remote
 
+import com.example.movieexplorer.data.remote.dto.MovieDetailsDto
 import com.example.movieexplorer.data.remote.dto.MovieResponseDto
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -22,6 +23,19 @@ class MovieApi(
                     parameters.append(
                         "page",
                         page.toString()
+                    )
+                }
+            }
+            .body()
+    }
+
+    suspend fun getMovieDetails(movieId: Int): MovieDetailsDto {
+        return httpClient
+            .get("https://api.themoviedb.org/3/movie/$movieId") {
+                url {
+                    parameters.append(
+                        "api_key",
+                        "e3fa29ff3ccecf2807d0ae68d4c4265e"
                     )
                 }
             }

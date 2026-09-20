@@ -14,5 +14,9 @@ val appModule = module {
 
     factory { GetTopRatedMoviesUseCase(get()) }
 
+    factory { GetMovieDetailsUseCase(get()) }
+
     viewModel { HomeViewModel(get()) }
+
+    viewModel { MovieDetailsViewModel(get()) }
 }
