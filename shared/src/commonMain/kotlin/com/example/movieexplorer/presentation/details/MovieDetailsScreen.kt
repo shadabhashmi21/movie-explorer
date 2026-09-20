@@ -4,6 +4,7 @@ import MovieDetailsViewModel
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -16,7 +17,8 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun MovieDetailsScreen(
     movieId: Int,
-    viewModel: MovieDetailsViewModel = koinViewModel()
+    viewModel: MovieDetailsViewModel = koinViewModel(),
+    onBackClick: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -31,7 +33,9 @@ fun MovieDetailsScreen(
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center
             ) {
-                CircularProgressIndicator()
+                CircularProgressIndicator(
+                    color = MaterialTheme.colorScheme.primary,
+                )
             }
         }
 
@@ -41,7 +45,8 @@ fun MovieDetailsScreen(
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = state.movie.title
+                    text = state.movie.title,
+                    color = MaterialTheme.colorScheme.onBackground,
                 )
             }
         }
@@ -52,7 +57,8 @@ fun MovieDetailsScreen(
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = state.message
+                    text = state.message,
+                    color = MaterialTheme.colorScheme.error
                 )
             }
         }

@@ -24,6 +24,7 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun HomeScreen(
+    onMovieClick: (Int) -> Unit,
     viewModel: HomeViewModel = koinViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -114,7 +115,11 @@ fun HomeScreen(
                             items = state.movies,
                             key = { it.id }
                         ) { movie ->
-                            MovieCard(movie = movie)
+                            MovieCard(
+                                movie = movie, onClick = {
+                                    onMovieClick(movie.id)
+                                }
+                            )
                         }
 
                         if (state.isLoadingMore) {

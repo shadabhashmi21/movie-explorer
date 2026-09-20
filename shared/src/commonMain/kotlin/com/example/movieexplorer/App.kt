@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import appModule
 import com.example.movieexplorer.core.theme.MovieExplorerTheme
+import com.example.movieexplorer.navigation.AppNavigation
 import org.koin.compose.KoinApplication
 import org.koin.dsl.koinConfiguration
 
@@ -38,7 +39,7 @@ fun App() {
                                 WindowInsets.safeDrawing
                             )
                     ) {
-                        HomeScreen()
+                        AppNavigation()
                     }
                 }
             }
